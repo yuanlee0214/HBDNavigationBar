@@ -27,6 +27,8 @@
     
     self.edgesForExtendedLayout = UIRectEdgeNone;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toRoot) name:@"pop-to-root" object:nil];
+    
+    self.view.backgroundColor = [UIColor colorWithRed:((float)arc4random_uniform(256) / 255.0) green:((float)arc4random_uniform(256) / 255.0) blue:((float)arc4random_uniform(256) / 255.0) alpha:1.0];
 }
 
 - (void)dealloc {
@@ -40,7 +42,8 @@
 - (IBAction)present:(UIButton *)sender {
     UIViewController *vc = [[CViewController alloc] init];
     HBDNavigationController *nav = [[HBDNavigationController alloc] initWithRootViewController:vc];
-    
+    nav.modalPresentationStyle = UIModalPresentationCurrentContext;
+    self.navigationController.definesPresentationContext = NO;
     [self presentViewController:nav animated:YES completion:^{
         
     }];

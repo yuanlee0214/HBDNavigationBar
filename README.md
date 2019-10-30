@@ -197,31 +197,30 @@ BOOL hasAlpha(UIColor *color) {
 
 #### 全屏返回
 
-建议和 [FDFullscreenPopGesture](https://github.com/forkingdog/FDFullscreenPopGesture) 一起使用，像下面那为 `fd_fullscreenPopGestureRecognizer` 添加 target 和 action：
+创建一个继承于 `HBDNavigationController` 的子类，具体参考 FSPNavigationController
 
 ```objc
-#import "BaseNavigationController.h"
-#import <FDFullscreenPopGesture/UINavigationController+FDFullscreenPopGesture.h>
+// FSPNavigationController.m
+@implementation FSPNavigationController
 
-@interface BaseNavigationController ()
-
-@end
-
-@implementation BaseNavigationController
-
-- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    [super pushViewController:viewController animated:animated];
-    NSArray *internalTargets = [self.fd_fullscreenPopGestureRecognizer valueForKey:@"targets"];
-    if (![internalTargets containsObject:self]) {
-        [self.fd_fullscreenPopGestureRecognizer addTarget:self action:NSSelectorFromString(@"handlePopGesture:")];
-    }
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    // 获取系统自带滑动手势的target对象
+    id target = self.interactivePopGestureRecognizer.delegate;
+    // 创建全屏滑动手势，调用系统自带滑动手势的 target 的 action 方法
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:target action:@selector(handleNavigationTransition:)];
+    // 设置手势代理，拦截手势触发
+    pan.delegate = self.interactivePopGestureRecognizer.delegate;
+    // 给导航控制器的view添加全屏滑动手势
+    [self.view addGestureRecognizer:pan];
+    // 禁止使用系统自带的滑动手势
+    self.interactivePopGestureRecognizer.enabled = NO;
 }
 
 @end
-
 ```
 
-一旦使用了 FDFullscreenPopGesture，`hbd_backInteractive`  和  `hbd_swipeBackEnabled` 将失效，此时使用 `fd_interactivePopDisabled` 代替。
 
 ## 感谢
 
@@ -229,7 +228,7 @@ BOOL hasAlpha(UIColor *color) {
 
 ## Requirements
 
-iOS 8+
+iOS 9+
 
 ## Installation
 
@@ -237,7 +236,7 @@ HBDNavigationBar is available through [CocoaPods](http://cocoapods.org). To inst
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'HBDNavigationBar', '~> 1.5.2'
+pod 'HBDNavigationBar', '~> 1.6.6'
 ```
 
 ## License

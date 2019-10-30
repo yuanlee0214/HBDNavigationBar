@@ -15,6 +15,7 @@
 @property (nonatomic, strong) IBInspectable UIImage *hbd_barImage;
 @property (nonatomic, strong) IBInspectable UIColor *hbd_tintColor;
 @property (nonatomic, strong) NSDictionary *hbd_titleTextAttributes;
+@property (nonatomic, strong) UIBarButtonItem *hbd_backBarButtonItem;
 
 @property (nonatomic, assign) IBInspectable float hbd_barAlpha;
 @property (nonatomic, assign) IBInspectable BOOL hbd_barHidden;
@@ -29,8 +30,5 @@
 @property (nonatomic, strong, readonly) UIImage *hbd_computedBarImage;
 
 - (void)hbd_setNeedsUpdateNavigationBar;
-- (void)hbd_setNeedsUpdateNavigationBarAlpha;
-- (void)hbd_setNeedsUpdateNavigationBarColorOrImage;
-- (void)hbd_setNeedsUpdateNavigationBarShadowAlpha;
 
 @end
